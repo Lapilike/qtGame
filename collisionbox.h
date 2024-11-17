@@ -7,6 +7,7 @@ class CollisionBox
 {
     std::vector<int> *m_Pos;
     std::vector<float> m_Size;
+
 public:
     CollisionBox();
     ~CollisionBox() {};

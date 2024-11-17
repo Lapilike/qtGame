@@ -1,11 +1,10 @@
 #ifndef ITEM_H
 #define ITEM_H
-#include <vector>
-#include <sstream>
 #include "stats.h"
+#include <sstream>
+#include <vector>
 
 #define ITEM_ID_FILE "Data/IDs/ItemID.txt"
-
 
 enum ItemType {
     HELMET,
@@ -25,6 +24,7 @@ private:
     bool m_Equiped;
     std::string m_ItemName;
     Stats m_Stats;
+
 public:
     Item();
     Item(int ID);
@@ -33,7 +33,7 @@ public:
     void equip();
     void unequip();
     bool isEquiped();
-    short* amountOfItems();
+    short *amountOfItems();
     int getID();
     std::string getName();
 };

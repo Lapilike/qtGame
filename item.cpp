@@ -1,17 +1,19 @@
 #include "item.h"
-#include <fstream>
 #include <QDebug>
+#include <fstream>
 
-Item::Item() {
+Item::Item()
+{
     m_ID = 0;
     m_ItemCount = 1;
     m_Equiped = false;
     m_Stats.setStat(0, 0);
 }
 
-Item::Item(int ID) {
+Item::Item(int ID)
+{
     std::ifstream IDFile(ITEM_ID_FILE);
-    if(!IDFile.is_open()) {
+    if (!IDFile.is_open()) {
         qDebug() << "Error opening Item ID File";
         return;
     }
@@ -22,9 +24,9 @@ Item::Item(int ID) {
     while (std::getline(IDFile, line)) {
         LineStream << line;
         LineStream.get(tmpChar);
-        if(tmpChar == '#') {
+        if (tmpChar == '#') {
             LineStream >> tmpId;
-            if(tmpId == ID) {
+            if (tmpId == ID) {
                 m_ID = tmpId;
                 setStat(LineStream);
                 LineStream >> m_Type;
@@ -38,20 +40,20 @@ Item::Item(int ID) {
     m_ItemCount = 1;
 
     IDFile.close();
-
 }
 
-void Item::setStat(int StatType, int StatVal) {
+void Item::setStat(int StatType, int StatVal)
+{
     m_Stats.setStat(StatType, StatVal);
 }
 
-void Item::setStat(std::stringstream& LineStream)
+void Item::setStat(std::stringstream &LineStream)
 {
     std::string buffer;
     int StatAmt;
     LineStream >> m_ItemName;
     LineStream >> StatAmt;
-    for(int i = 0; i < StatAmt; i++) {
+    for (int i = 0; i < StatAmt; i++) {
         std::vector<int> stat = {0, 0};
         LineStream >> stat[0];
         LineStream >> stat[1];
@@ -59,23 +61,28 @@ void Item::setStat(std::stringstream& LineStream)
     }
 }
 
-void Item::equip() {
+void Item::equip()
+{
     m_Equiped = true;
 }
 
-void Item::unequip() {
+void Item::unequip()
+{
     m_Equiped = false;
 }
 
-bool Item::isEquiped() {
+bool Item::isEquiped()
+{
     return m_Equiped;
 }
 
-short* Item::amountOfItems() {
+short *Item::amountOfItems()
+{
     return &m_ItemCount;
 }
 
-int Item::getID() {
+int Item::getID()
+{
     return m_ID;
 }
 

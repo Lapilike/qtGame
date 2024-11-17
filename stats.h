@@ -5,7 +5,7 @@
 #include <map>
 #include <vector>
 
-enum StatType{
+enum StatType {
     HP,
     MSPD,
     ASPD,
@@ -21,6 +21,7 @@ class Stats
 {
 private:
     std::map<StatType, short> m_Stats;
+
 public:
     Stats();
     void setStat(std::vector<int>);

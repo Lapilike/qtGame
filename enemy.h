@@ -6,14 +6,15 @@
 
 #define ENEMY_ID_PATH "Data/IDs/EnemiesID.txt"
 
-class Enemy :public Entity
+class Enemy : public Entity
 {
 private:
     Stats m_Stats;
+
 public:
     Enemy();
     ~Enemy();
-    void Spawn(std::vector<std::vector<Tile>>& Tiles, int EnemyID, int TilePosX, int TilePosY);
+    void Spawn(std::vector<std::vector<Tile>> &Tiles, int EnemyID, int TilePosX, int TilePosY);
     void setStats(std::ifstream &EnemyID);
     void setEnemyAnimation(std::ifstream &IDFile, int AnimAmnt);
     void loadFromFile(int EnemyID);

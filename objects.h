@@ -4,14 +4,16 @@
 #define MAP_HGHT 100
 #define MAP_WDTH 100
 
-class Object {
+class Object
+{
     int x, y;
-    char* TexturePath;
+    char *TexturePath;
+
 public:
     Object();
-    Object(char*);
+    Object(char *);
     void setPosition(int, int);
-    void setTexture(char* );
+    void setTexture(char *);
     ~Object();
 };
 
