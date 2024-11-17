@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/Textures">
+        <file alias="Floor_Brick">Data/Textures/Brick_floor.png</file>
+        <file alias="Test">Data/Textures/Test.png</file>
+        <file alias="Chest">Data/Textures/chest.png</file>
+    </qresource>
+    <qresource prefix="/Shaders">
+        <file>vertexShader.vert</file>
+        <file>fragShader.frag</file>
+    </qresource>
+    <qresource prefix="/Animations/Player">
+        <file alias="Player_Idle">Data/Textures/character-Sheet.png</file>
+        <file alias="Player_Run">Data/Textures/character-Sheet-Run.png</file>
+        <file alias="Player_Idle_Up">Data/Textures/character-Sheet-Idle-Up.png</file>
+        <file alias="Player_Attack">Data/Animations/character-attack.png</file>
+    </qresource>
+    <qresource prefix="/TileSets">
+        <file alias="Set1">Data/Textures/TileSet1.png</file>
+    </qresource>
+    <qresource prefix="/maps">
+        <file>Data/Textures/map1.txt</file>
+    </qresource>
+    <qresource prefix="/ItemIDs">
+        <file>Data/IDs/ItemID.txt</file>
+    </qresource>
+    <qresource prefix="/Textures/Enemies">
+        <file alias="Bleb">Data/Textures/Enemies/bleb.png</file>
+    </qresource>
+    <qresource prefix="/Animations/Enemies/Bleb">
+        <file alias="Bleb_Idle">Data/Animations/bleb-Idle.png</file>
+    </qresource>
+    <qresource prefix="/Animations/Attack">
+        <file alias="Attack">Data/Animations/Attack.png</file>
+    </qresource>
+</RCC>
