@@ -11,9 +11,6 @@ std::vector<bool> Entity::checkIntersect(std::vector<float> tile)
 {
     std::vector<bool> CollisionVector = {false, false};
 
-    CollisionVector[0] = (tile[0] > (m_Pos[0] - TILE_SIZE/2)) && (tile[1] < (m_Pos[0] + TILE_SIZE/2));
-    CollisionVector[1] = (tile[2] > (m_Pos[1] - TILE_SIZE/2)) && (tile[3] < (m_Pos[1] + TILE_SIZE/2));
-
     return CollisionVector;
 }
 
