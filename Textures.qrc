@@ -13,6 +13,7 @@
         <file alias="Player_Run">Data/Textures/character-Sheet-Run.png</file>
         <file alias="Player_Idle_Up">Data/Textures/character-Sheet-Idle-Up.png</file>
         <file alias="Player_Attack">Data/Animations/character-attack.png</file>
+        <file alias="Player_Down">Data/Animations/character-idle-Down.png</file>
     </qresource>
     <qresource prefix="/TileSets">
         <file alias="Set1">Data/Textures/TileSet1.png</file>
