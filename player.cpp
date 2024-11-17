@@ -22,8 +22,7 @@ void Player::Attack(std::vector<std::vector<Tile>> tiles)
     position[0] = m_Pos[0] + m_Direct[0] * TILE_SIZE;
     position[1] = m_Pos[1] + m_Direct[1] * TILE_SIZE;
     CheckSquare->setPosition(position[0], position[1]);
-    CheckSquare->setNewCollision(15 + 45 * m_Direct[0], 15 + 45 * m_Direct[1]);
-    CheckSquare->setSize(1 + 1.5 * abs(m_Direct[1]), 1 + 1.5 * abs(m_Direct[0]));
+    CheckSquare->setNewCollision(abs(15 + 45 * m_Direct[1]), abs(15 + 45 * m_Direct[0]));
     std::vector<std::vector<int>> NextTiles;
     getTilesInFront(NextTiles);
     for(int i = 0; i < NextTiles.size(); i++) {

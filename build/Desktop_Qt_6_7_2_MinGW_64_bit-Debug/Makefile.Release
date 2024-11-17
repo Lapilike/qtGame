@@ -171,6 +171,7 @@ release/qrc_Textures.cpp: ../../Textures.qrc \
 		../../Data/Animations/Attack.png \
 		../../Data/Textures/character-Sheet-Idle-Up.png \
 		../../Data/Textures/character-Sheet-Run.png \
+		../../Data/Animations/character-idle-Down.png \
 		../../Data/Animations/character-attack.png \
 		../../Data/Textures/character-Sheet.png \
 		../../Data/Textures/chest.png \

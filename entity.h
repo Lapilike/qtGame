@@ -12,7 +12,6 @@ private:
     bool Staggered;
 public:
     Entity();
-    std::vector<bool> checkIntersect(std::vector<float> tile);
     bool checkCollision(std::vector<std::vector<Tile>> tiles);
     void getTilesInFront(std::vector<std::vector<int> > &NextTiles);
     void move(std::vector<std::vector<Tile>> tiles);
