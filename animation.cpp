@@ -25,21 +25,24 @@ void Animation::addAnimation(std::string AnimationPath, int FrameCount, float An
 bool Animation::increaseCurrFrame()
 {
     m_CurrentFrame++;
-    if(m_CurrentFrame == m_TotalFrames * m_AnimSpeed) {
+    if (m_CurrentFrame == m_TotalFrames * m_AnimSpeed) {
         m_CurrentFrame = 0;
         return true;
     }
     return false;
 }
 
-QOpenGLTexture* Animation::spriteSheet() {
+QOpenGLTexture *Animation::spriteSheet()
+{
     return m_spriteSheet;
 }
 
-int Animation::totalFrames() {
+int Animation::totalFrames()
+{
     return m_TotalFrames;
 }
 
-int Animation::currentFrame() {
+int Animation::currentFrame()
+{
     return m_CurrentFrame / m_AnimSpeed;
 }

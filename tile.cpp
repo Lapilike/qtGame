@@ -1,6 +1,7 @@
 #include "tile.h"
 
-Tile::Tile() {
+Tile::Tile()
+{
     m_Blocked = false;
     m_Object = nullptr;
     m_Interaction = NOINTERACTION;
@@ -8,20 +9,21 @@ Tile::Tile() {
     m_Pos = {0, 0};
 }
 
-bool Tile::isBlocked() {
+bool Tile::isBlocked()
+{
     return m_Blocked;
 }
 
 void Tile::block(int Xpos, int Ypos)
 {
     m_Collision = new CollisionBox(&m_Pos);
-    m_Collision->setSize(TILE_SIZE/2, TILE_SIZE/2);
+    m_Collision->setSize(TILE_SIZE / 2, TILE_SIZE / 2);
 
     m_Pos = {Xpos, Ypos};
     m_Blocked = true;
 }
 
-CollisionBox* Tile::getCollision()
+CollisionBox *Tile::getCollision()
 {
     return m_Collision;
 }
@@ -41,6 +43,3 @@ InteractionType Tile::Interation()
 {
     return m_Interaction;
 }
-
-
-

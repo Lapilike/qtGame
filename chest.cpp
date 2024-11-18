@@ -1,9 +1,14 @@
 #include "chest.h"
 #include "opengl.h"
 
-Chest::Chest() : Obj() {}
+Chest::Chest()
+    : Obj()
+{}
 
-void Chest::spawnChest(std::vector<std::vector<Tile>>& Tiles, int TilePosX, int TilePosY, std::vector<int> ItemsID)
+void Chest::spawnChest(std::vector<std::vector<Tile>> &Tiles,
+                       int TilePosX,
+                       int TilePosY,
+                       std::vector<int> ItemsID)
 {
     try {
         Tiles.at(TilePosY).at(TilePosX);
@@ -16,8 +21,8 @@ void Chest::spawnChest(std::vector<std::vector<Tile>>& Tiles, int TilePosX, int 
     m_Pos[1] = TILE_SIZE * (TilePosY + 0.5f);
     setNewCollision(30, 22.5f);
     setTexture(":/Textures/Chest");
-    for(int i = 0; i < ItemsID.size(); i++) {
-        Item* item = new Item(ItemsID[i]);
+    for (int i = 0; i < ItemsID.size(); i++) {
+        Item *item = new Item(ItemsID[i]);
         m_inv.addItem(item);
     }
 };

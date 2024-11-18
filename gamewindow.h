@@ -1,8 +1,8 @@
 #ifndef GAMEWINDOW_H
 #define GAMEWINDOW_H
 
-#include <QMainWindow>
 #include <QListWidgetItem>
+#include <QMainWindow>
 #include "chest.h"
 
 #define SCR_WDTH 1920
@@ -23,7 +23,7 @@ public:
     ~GameWindow();
 
 public slots:
-    void openInventory(Chest& chest);
+    void openInventory(Chest &chest);
 
 private slots:
     void on_pushButton_clicked();

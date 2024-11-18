@@ -12,17 +12,19 @@ enum EntityState {
 class Animation
 {
 private:
-    QOpenGLTexture* m_spriteSheet;
+    QOpenGLTexture *m_spriteSheet;
     int m_TotalFrames;
     int m_CurrentFrame;
     float m_AnimSpeed;
+
 public:
     Animation() {};
-    ~Animation() {
+    ~Animation()
+    {
         m_spriteSheet->destroy();
         delete m_spriteSheet;
     };
-    QOpenGLTexture* spriteSheet();
+    QOpenGLTexture *spriteSheet();
     void addAnimation(QImage spriteSheet, int FrameCount, float AnimSpeed);
     void addAnimation(std::string spriteSheet, int FrameCount, float AnimSpeed);
     bool increaseCurrFrame();

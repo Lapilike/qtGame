@@ -7,12 +7,12 @@ Enemy::Enemy() {}
 Enemy::~Enemy()
 {
     delete getCollision();
-    delete  texture;
-    for (const auto& [State, Anim] : anim)
-        delete  Anim;
+    delete texture;
+    for (const auto &[State, Anim] : anim)
+        delete Anim;
 }
 
-void Enemy::Spawn(std::vector<std::vector<Tile>>& Tiles, int EnemyID, int TilePosX, int TilePosY)
+void Enemy::Spawn(std::vector<std::vector<Tile>> &Tiles, int EnemyID, int TilePosX, int TilePosY)
 {
     try {
         Tiles.at(TilePosY).at(TilePosX);
@@ -36,11 +36,11 @@ void Enemy::loadFromFile(int EnemyID)
     int tmpID;
     int AnimAmnt;
     float width, height;
-    while(getline(IDFile, line)) {
+    while (getline(IDFile, line)) {
         lineStream << line;
         lineStream >> tmpChar;
         lineStream >> tmpID;
-        if(tmpChar == '#' && tmpID == EnemyID) {
+        if (tmpChar == '#' && tmpID == EnemyID) {
             lineStream >> width;
             lineStream >> height;
             setNewCollision(width, height);
@@ -64,7 +64,7 @@ bool Enemy::isDead()
     bool Dead = m_Stats.getStat(HP) <= 0;
     qDebug() << Dead;
     qDebug() << m_Stats.getStat(HP);
-    return  Dead;
+    return Dead;
 }
 
 int Enemy::getStat(int StatType)
@@ -73,13 +73,14 @@ int Enemy::getStat(int StatType)
 }
 
 void Enemy::setEnemyAnimation(std::ifstream& IDFile, int AnimAmnt)
+
 {
     std::string line;
     std::string AnimationPath;
     std::stringstream lineStream;
     int State, FrameCount, Speed;
 
-    for(int i = 0; i < AnimAmnt; i++) {
+    for (int i = 0; i < AnimAmnt; i++) {
         getline(IDFile, line);
         lineStream << line;
 
@@ -93,18 +94,16 @@ void Enemy::setEnemyAnimation(std::ifstream& IDFile, int AnimAmnt)
     }
 }
 
-void Enemy::setStats(std::ifstream& IDFile)
+void Enemy::setStats(std::ifstream &IDFile)
 {
     std::string line;
 
     getline(IDFile, line);
     std::stringstream lineStream(line);
     std::vector<int> StatVector = {0, 0};
-    while(!lineStream.eof()) {
+    while (!lineStream.eof()) {
         lineStream >> StatVector[0];
         lineStream >> StatVector[1];
         m_Stats.setStat(StatVector);
     }
 }
-
-

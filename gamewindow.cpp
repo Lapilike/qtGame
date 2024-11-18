@@ -1,10 +1,10 @@
 #include "gamewindow.h"
+#include <QDebug>
+#include <QImage>
+#include <QLabel>
+#include <QTimer>
 #include "ui_gamewindow.h"
 #include <iostream>
-#include <QTimer>
-#include <QLabel>
-#include <QImage>
-#include <QDebug>
 
 GameWindow::GameWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -20,8 +20,6 @@ GameWindow::GameWindow(QWidget *parent)
     ui->openGLWidget->move(0, 0);
     ui->openGLWidget->show();
     ui->openGLWidget->setFocus();
-
-
 }
 
 GameWindow::~GameWindow()
@@ -29,11 +27,11 @@ GameWindow::~GameWindow()
     delete ui;
 }
 
-void GameWindow::openInventory(Chest& chest)
+void GameWindow::openInventory(Chest &chest)
 {
-    if(ui->frame->isVisible())
+    if (ui->frame->isVisible())
         return;
-    for(int i = 0; i < chest.m_inv.getItemAmnt(); i++) {
+    for (int i = 0; i < chest.m_inv.getItemAmnt(); i++) {
         QListWidgetItem *ListItem = new QListWidgetItem;
         ListItem->setText(chest.m_inv.getItemName(i).data());
         ui->listWidget_2->addItem(ListItem);
@@ -41,22 +39,14 @@ void GameWindow::openInventory(Chest& chest)
     ui->frame->setVisible(true);
 }
 
-
-
 void GameWindow::on_pushButton_clicked()
 {
     ui->openGLWidget->setVisible(true);
 }
-
 
 void GameWindow::on_pushButton_2_clicked()
 {
     close();
 }
 
-
-void GameWindow::on_listWidget_2_itemDoubleClicked(QListWidgetItem *item)
-{
-
-}
-
+void GameWindow::on_listWidget_2_itemDoubleClicked(QListWidgetItem *item) {}
