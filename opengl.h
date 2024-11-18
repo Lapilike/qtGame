@@ -11,6 +11,7 @@
 #include <QtOpenGLWidgets/QOpenGLWidget>
 
 #include "animation.h"
+#include "bleb.h"
 #include "enemy.h"
 #include "map.h"
 #include "player.h"
@@ -22,16 +23,14 @@ class OpenGL : public QOpenGLWidget, protected QOpenGLFunctions
 
 private:
     Map *m_level;
-    Obj m_Object;
-    Player *m_player;
-    std::vector<Enemy *> Enemies;
-    SpriteRenderer *m_Renderer;
-    std::vector<QOpenGLTexture *> m_textures;
-    std::map<std::string, std::map<EntityState, Animation *>> m_Animations;
+    Player* m_player;
+    std::vector<Bleb*> Enemies;
+    SpriteRenderer* m_Renderer;
+    std::vector<QOpenGLTexture*> m_textures;
+    std::map<std::string, std::map<EntityState, Animation*>> m_Animations;
     QSet<int> m_PressedKeys;
     QTimer *timer;
 
-    Obj *Square;
     float angle;
 
 public:
@@ -40,10 +39,6 @@ public:
     {
         m_player = new Player;
         m_level = new Map(10, 10);
-
-        timer = new QTimer(this);
-        connect(timer, &QTimer::timeout, this, &OpenGL::updateGame);
-        timer->start(1000 / FPS);
     }
     ~OpenGL()
     {

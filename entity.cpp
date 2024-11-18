@@ -23,34 +23,36 @@ bool Entity::checkCollision(std::vector<std::vector<Tile>> tiles)
         return false;
 
     bool Check = false;
-    for (int i = 0; i < NextTiles.size(); i++) {
-        if (tiles[NextTiles[i][1]][NextTiles[i][0]].isBlocked()) {
-            m_Pos[0] += m_Direct[0] * (float) m_Vel;
-            m_Pos[1] += m_Direct[1] * (float) m_Vel;
+  
+    m_Pos[0] += m_Direct[0] * (float)m_Vel;
+    m_Pos[1] += m_Direct[1] * (float)m_Vel;
 
+    for(int i = 0; i < NextTiles.size(); i++) {
+        if(tiles[NextTiles[i][1]][NextTiles[i][0]].isBlocked()) {
             CollisionBox *Collision = getCollision();
             CollisionBox *Obstacle = tiles[NextTiles[i][1]][NextTiles[i][0]].getCollision();
-            Check = Collision->checkIntersect(*Obstacle);
-            m_Pos[0] -= m_Direct[0] * (float) m_Vel;
-            m_Pos[1] -= m_Direct[1] * (float) m_Vel;
-            if (Check)
+            Check= Collision->checkIntersect(*Obstacle);
+
+            if(Check) {
+                m_Pos[0] -= m_Direct[0] * (float)m_Vel;
+                m_Pos[1] -= m_Direct[1] * (float)m_Vel;
                 return Check;
+            }
         }
-        if (!(tiles[NextTiles[i][1]][NextTiles[i][0]].Interation() == NOINTERACTION)) {
-            m_Pos[0] += m_Direct[0] * (float) m_Vel;
-            m_Pos[1] += m_Direct[1] * (float) m_Vel;
-
+        if(!(tiles[NextTiles[i][1]][NextTiles[i][0]].Interation() == NOINTERACTION)) {
             CollisionBox *Collision = getCollision();
-            Obj *Obstacle = (Obj *) tiles[NextTiles[i][1]][NextTiles[i][0]].getObject();
-
-            m_Pos[0] -= m_Direct[0] * (float) m_Vel;
-            m_Pos[1] -= m_Direct[1] * (float) m_Vel;
+            Obj *Obstacle = (Obj*)tiles[NextTiles[i][1]][NextTiles[i][0]].getObject();
             Check = Collision->checkIntersect(*Obstacle->getCollision());
-            if (Check)
+            if(Check) {
+                m_Pos[0] -= m_Direct[0] * (float)m_Vel;
+                m_Pos[1] -= m_Direct[1] * (float)m_Vel;
                 return Check;
+            }
         }
     }
 
+    m_Pos[0] -= m_Direct[0] * (float)m_Vel;
+    m_Pos[1] -= m_Direct[1] * (float)m_Vel;
     return Check;
 }
 //1
@@ -59,21 +61,22 @@ void Entity::getTilesInFront(std::vector<std::vector<int>> &NextTiles)
     int TilePosX = m_Pos[0] / TILE_SIZE;
     int TilePosY = m_Pos[1] / TILE_SIZE;
 
-    std::vector<int> Direct = {(int) ceil(m_Direct[0]), (int) ceil(m_Direct[1])};
-    if (!((int) (Direct[0] + Direct[1]) % 2)) {
-        for (int i = 0; i < 3; i++) {
-            std::vector<int> Tile = {0, 0};
-            Tile[0] = TilePosX + Direct[0] * ((i + 1) / 2);
-            Tile[1] = TilePosY + Direct[1] * ((i + 1) % 2);
-            NextTiles.push_back(Tile);
+
+    std::vector<float> Direct = {m_Direct[0], m_Direct[1]};
+    bool isDiagonal = static_cast<int>(Direct[0] + Direct[1]) % 2 == 0;
+    int offsetX, offsetY;
+    for(int i = 0; i < 3; i++) {
+        if(isDiagonal) {
+            offsetX = Direct[0] * ((i + 1) / 2);
+            offsetY = Direct[1] * ((i + 1) % 2);
         }
-    } else {
-        for (int i = 0; i < 3; i++) {
-            std::vector<int> Tile = {0, 0};
-            Tile[0] = TilePosX + Direct[0] + ((i + 1) / 2) * Direct[1] * pow(-1, i);
-            Tile[1] = TilePosY + Direct[1] + ((i + 1) / 2) * Direct[0] * pow(-1, i);
-            NextTiles.push_back(Tile);
+        else {
+            int directionModifier = (i % 2 == 0) ? 1 : -1;
+            offsetX = Direct[0] + Direct[1] * directionModifier;
+            offsetY = Direct[1] + Direct[0] * directionModifier;
         }
+
+        NextTiles.push_back({TilePosX + offsetX, TilePosY + offsetY});
     }
 }
 

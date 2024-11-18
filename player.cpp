@@ -52,3 +52,9 @@ void Player::setStats()
     m_Stats.setStat(PDMG, 10);
     m_Stats.setStat(MDMG, 0);
 }
+
+void Player::getDamaged(int Damage)
+{
+    int hp = m_Stats.getStat(HP);
+    m_Stats.setStat(HP, hp - Damage);
+}
