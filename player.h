@@ -18,6 +18,8 @@ public:
     void Attack(std::vector<std::vector<Tile> > tiles);
     void drawAttack(SpriteRenderer& renderer);
     void setStats();
+
+    void getDamaged(int Damage);
 };
 
 #endif // PLAYER_H

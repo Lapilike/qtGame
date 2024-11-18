@@ -26,7 +26,11 @@ std::vector<float> SpriteRenderer::normalizeVec(std::vector<float> vector)
     return normalized;
 }
 
-void SpriteRenderer::initMapRender(std::vector<std::vector<int>> TileIDs, int Width, int Height, int SetHeight, int SetWidth)
+void SpriteRenderer::initMapRender(std::vector<std::vector<int>> TileIDs,
+                                   int Width,
+                                   int Height,
+                                   int SetHeight,
+                                   int SetWidth)
 {
     std::vector<float> vertecies;
     std::vector<unsigned int> indicies;
@@ -132,7 +136,12 @@ void SpriteRenderer::drawMap(QOpenGLTexture &TileSet, std::vector<float> positio
     m_shader->release();
 }
 
-void SpriteRenderer::drawSprite(QOpenGLTexture& texture, int CurrentFrame, float TotalFrames, std::vector<int> position, std::vector<float> size, std::vector<float> direction) {
+void SpriteRenderer::drawSprite(QOpenGLTexture& texture,
+                                int CurrentFrame,
+                                float TotalFrames,
+                                std::vector<int> position,
+                                std::vector<float> size,
+                                std::vector<float> direction) {
     QMatrix4x4 TexMat;
     TexMat.setToIdentity();
     TexMat.scale(1.0/TotalFrames, 1.0, 1.0);
@@ -159,7 +168,13 @@ void SpriteRenderer::drawSprite(QOpenGLTexture& texture, int CurrentFrame, float
     m_shader->release();
 }
 
-void SpriteRenderer::drawSprite(QOpenGLTexture& texture, int CurrentFrame, float TotalFrames, int angle, std::vector<int> position, std::vector<float> size, std::vector<float> direction) {
+void SpriteRenderer::drawSprite(QOpenGLTexture& texture,
+                                int CurrentFrame,
+                                float TotalFrames,
+                                int angle,
+                                std::vector<int> position,
+                                std::vector<float> size,
+                                std::vector<float> direction) {
     QMatrix4x4 TexMat;
     TexMat.setToIdentity();
     TexMat.scale(1.0/TotalFrames, 1.0, 1.0);
@@ -188,7 +203,10 @@ void SpriteRenderer::drawSprite(QOpenGLTexture& texture, int CurrentFrame, float
     m_shader->release();
 }
 
-void SpriteRenderer::drawSprite(QOpenGLTexture& texture, std::vector<int> position, std::vector<float> size, std::vector<float> direction) {
+void SpriteRenderer::drawSprite(QOpenGLTexture& texture,
+                                std::vector<int> position,
+                                std::vector<float> size,
+                                std::vector<float> direction) {
     float angle = (atan(direction[1]/direction[0])) / M_PI * 180;
     QMatrix4x4 TextMat;
     TextMat.setToIdentity();

@@ -14,7 +14,7 @@
 #include "map.h"
 #include "player.h"
 #include "animation.h"
-#include "enemy.h"
+#include "bleb.h"
 
 class OpenGL : public QOpenGLWidget, protected QOpenGLFunctions {
 
@@ -25,7 +25,7 @@ private:
     Map* m_level;
     Obj m_Object;
     Player* m_player;
-    std::vector<Enemy*> Enemies;
+    std::vector<Bleb*> Enemies;
     SpriteRenderer* m_Renderer;
     std::vector<QOpenGLTexture*> m_textures;
     std::map<std::string, std::map<EntityState, Animation*>> m_Animations;
@@ -41,9 +41,7 @@ public:
         m_player = new Player;
         m_level = new Map(10, 10);
 
-        timer = new QTimer(this);
-        connect(timer, &QTimer::timeout, this, &OpenGL::updateGame);
-        timer->start(1000/FPS);
+
     }
     ~OpenGL() {
         delete m_player;

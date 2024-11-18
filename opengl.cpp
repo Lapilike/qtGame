@@ -22,9 +22,25 @@ void OpenGL::initializeGL() {
 
     m_player->anim = m_Animations["player"];
 
-    Enemy* Bleb = new Enemy();
-    Bleb->Spawn(m_level->tiles, 0, 10, 2);
-    Enemies.push_back(Bleb);
+    Bleb* bleb = new Bleb(&m_level->tiles, 10, 10, &m_player->m_Pos);
+    Enemies.push_back(bleb);
+
+    timer = new QTimer(this);
+    connect(timer, &QTimer::timeout, [=](){
+        static bool isRunning = false;
+
+        if (isRunning) return; // Пропуск, если функция ещё выполняется
+        isRunning = true;
+
+        QElapsedTimer elapsedTimer;
+        elapsedTimer.start();
+        updateGame();
+        int elapsed = elapsedTimer.elapsed();
+        int nextInterval = fmax(0, static_cast<int>(1000/FPS) - static_cast<int>(elapsed));
+        timer->setInterval(nextInterval); // Учитываем задержку
+        isRunning = false;
+    });
+    timer->start(1000/FPS);
 }
 
 void OpenGL::resizeGL(int w, int h) {
@@ -32,12 +48,16 @@ void OpenGL::resizeGL(int w, int h) {
 }
 
 void OpenGL::paintGL() {
-   glClear(GL_COLOR_BUFFER_BIT);
-   drawMap();
-   for(int i = 0; i < Enemies.size(); i++)
-       Enemies[i]->renderAnim(*m_Renderer);
-   drawPlayer();
+    if(!m_player->isStaggered()) {
+        checkMoveKeys();
+        checkInteractKeys();
+    }
+    checkDeadEnemies();
 
+    drawMap();
+    for(int i = 0; i < Enemies.size(); i++)
+        Enemies[i]->renderAnim(*m_Renderer);
+    drawPlayer();
 }
 
 QOpenGLShaderProgram *OpenGL::loadShader()
@@ -61,11 +81,8 @@ void OpenGL::initMap()
 }
 
 void OpenGL::updateGame() {
-    if(!m_player->isStaggered()) {
-        checkMoveKeys();
-        checkInteractKeys();
-    }
-    checkDeadEnemies();
+
+
     update();
 }
 

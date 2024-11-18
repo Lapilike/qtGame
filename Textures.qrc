@@ -29,6 +29,8 @@
     </qresource>
     <qresource prefix="/Animations/Enemies/Bleb">
         <file alias="Bleb_Idle">Data/Animations/bleb-Idle.png</file>
+        <file alias="Bleb_Run">Data/Animations/Bleb/bleb-Run.png</file>
+        <file alias="Attack">Data/Animations/Bleb/Attack.png</file>
     </qresource>
     <qresource prefix="/Animations/Attack">
         <file alias="Attack">Data/Animations/Attack.png</file>

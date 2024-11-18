@@ -13,6 +13,7 @@ CONFIG += c++17
 
 SOURCES += \
     animation.cpp \
+    bleb.cpp \
     chest.cpp \
     collisionbox.cpp \
     enemy.cpp \
@@ -31,6 +32,7 @@ SOURCES += \
 
 HEADERS += \
     animation.h \
+    bleb.h \
     chest.h \
     collisionbox.h \
     enemy.h \

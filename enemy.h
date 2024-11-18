@@ -20,6 +20,8 @@ public:
 
     void getDamaged(int Damage);
     bool isDead();
+
+    int getStat(int StatType);
 };
 
 #endif // ENEMY_H

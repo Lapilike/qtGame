@@ -67,6 +67,11 @@ bool Enemy::isDead()
     return  Dead;
 }
 
+int Enemy::getStat(int StatType)
+{
+    return m_Stats.getStat(StatType);
+}
+
 void Enemy::setEnemyAnimation(std::ifstream& IDFile, int AnimAmnt)
 {
     std::string line;
@@ -83,6 +88,7 @@ void Enemy::setEnemyAnimation(std::ifstream& IDFile, int AnimAmnt)
         lineStream >> FrameCount;
         lineStream >> Speed;
         addAnimation(AnimationPath, State, FrameCount, Speed);
+        lineStream.clear();
         lineStream.str(std::string());
     }
 }
