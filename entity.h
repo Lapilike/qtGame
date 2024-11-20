@@ -13,13 +13,14 @@ private:
 
 public:
     Entity();
-    bool checkCollision(std::vector<std::vector<Tile>> tiles);
+    virtual ~Entity() {};
+    bool checkCollision(std::vector<std::vector<Tile>> &tiles);
     void getTilesInFront(std::vector<std::vector<int>> &NextTiles);
-    void move(std::vector<std::vector<Tile>> tiles);
+    void move(std::vector<std::vector<Tile> > &tiles);
     void normalizeDir();
     void setVelocity(int);
     void setDirection(int, int);
-    bool renderAnim(SpriteRenderer &renderer) override;
+    bool renderAnim(SpriteRenderer &renderer) override final;
 
     void setState(EntityState);
     EntityState getState();

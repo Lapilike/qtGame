@@ -6,7 +6,6 @@
 class Inventory
 {
 private:
-    int m_ItemAmt;
     std::vector<Item *> m_Items;
 
 public:
@@ -14,7 +13,8 @@ public:
     std::string getItemName(int ItemIndex);
     int getItemAmnt();
     void addItem(Item *);
-    Item *removeItem(int);
+    Item* getItem(int ItemID);
+    Item *removeItem(int ItemID);
 };
 
 #endif // INVENTORY_H

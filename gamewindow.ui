@@ -20,46 +20,27 @@
    <string>GameWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="OpenGL" name="openGLWidget">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>341</width>
-      <height>231</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="pushButton_2">
     <property name="geometry">
      <rect>
-      <x>960</x>
-      <y>540</y>
+      <x>940</x>
+      <y>1040</y>
       <width>71</width>
-      <height>81</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
      <string>Close</string>
     </property>
    </widget>
-   <widget class="QFrame" name="frame">
+   <widget class="QWidget" name="widget" native="true">
     <property name="geometry">
      <rect>
-      <x>270</x>
+      <x>680</x>
       <y>120</y>
       <width>841</width>
       <height>451</height>
      </rect>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Shape::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Shadow::Raised</enum>
     </property>
     <widget class="QLabel" name="label">
      <property name="geometry">
@@ -100,37 +81,43 @@
      </property>
     </widget>
    </widget>
+   <widget class="OpenGL" name="openGLWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>300</width>
+      <height>200</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>990</x>
+      <y>30</y>
+      <width>201</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
   </widget>
  </widget>
  <customwidgets>
   <customwidget>
    <class>OpenGL</class>
    <extends>QOpenGLWidget</extends>
-   <header>graphics.h</header>
+   <header location="global">opengl.h</header>
    <slots>
     <signal>openChest()</signal>
    </slots>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>openGLWidget</sender>
-   <signal>openChest()</signal>
-   <receiver>GameWindow</receiver>
-   <slot>openInventory()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>170</x>
-     <y>115</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>959</x>
-     <y>539</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>openInventory()</slot>
  </slots>

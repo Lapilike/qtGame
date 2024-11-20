@@ -2,7 +2,7 @@
 
 Inventory::Inventory()
 {
-    m_ItemAmt = 0;
+
 }
 
 std::string Inventory::getItemName(int ItemIndex)
@@ -12,19 +12,26 @@ std::string Inventory::getItemName(int ItemIndex)
 
 int Inventory::getItemAmnt()
 {
-    return m_ItemAmt;
+    return m_Items.size();;
 }
 
 void Inventory::addItem(Item *Itm)
 {
-    m_ItemAmt++;
     m_Items.push_back(Itm);
 }
 
-Item *Inventory::removeItem(int ItmID)
+Item *Inventory::getItem(int ItemID)
+{
+    for(int i = 0; i < m_Items.size(); i++) {
+        if(m_Items[i]->getID() == ItemID)
+            return m_Items[i];
+    }
+}
+
+Item *Inventory::removeItem(int ItemID)
 {
     for (int i = 0; i < m_Items.size(); i++) {
-        if (m_Items[i]->getID() == ItmID) {
+        if (m_Items[i]->getID() == ItemID) {
             short *amt = m_Items[i]->amountOfItems();
             if (*amt <= 1) {
                 auto iter = m_Items.cbegin();

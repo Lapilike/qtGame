@@ -32,6 +32,8 @@ private slots:
 
     void on_listWidget_2_itemDoubleClicked(QListWidgetItem *item);
 
+    void showCountDown();
+
 private:
     Ui::GameWindow *ui;
 };

@@ -30,11 +30,13 @@ public:
     Item(int ID);
     void setStat(int StatType, int StatValue);
     void setStat(std::stringstream &LineStream);
+    void setAmnt(int Amount);
     void equip();
     void unequip();
     bool isEquiped();
     short *amountOfItems();
     int getID();
+    std::map<StatType, short> getStats();
     std::string getName();
 };
 

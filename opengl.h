@@ -1,6 +1,7 @@
 #ifndef OPENGL_H
 #define OPENGL_H
 
+#include "enemymanager.h"
 #define VRTX_CNT 8
 #define FPS 60.0f
 #define TEST_TEX (":/Textures/Test")
@@ -24,14 +25,14 @@ class OpenGL : public QOpenGLWidget, protected QOpenGLFunctions
 private:
     Map *m_level;
     Player* m_player;
-    std::vector<Bleb*> Enemies;
     SpriteRenderer* m_Renderer;
     std::vector<QOpenGLTexture*> m_textures;
     std::map<std::string, std::map<EntityState, Animation*>> m_Animations;
     QSet<int> m_PressedKeys;
     QTimer *timer;
 
-    float angle;
+    std::map<EntityState, Animation*> anim;
+    EnemyManager* m_Manager;
 
 public:
     OpenGL(QWidget *parent = nullptr)
@@ -53,6 +54,7 @@ public:
     }
 signals:
     void openChest(Chest &chest);
+    void startCountDown();
 
 protected:
     void initializeGL() override;
@@ -63,19 +65,18 @@ protected:
     void initMap();
     void drawMap();
     void drawPlayer();
+    void drawEnemies();
     void loadTextures();
     void checkMoveKeys();
     void checkInteractKeys();
     void keyPressEvent(QKeyEvent *) override;
     void keyReleaseEvent(QKeyEvent *event) override;
 
-    //sadasdasdasd
-    //sadasdsadsadas
-    //sadsadasdasdas
     void checkDeadEnemies();
 
 public slots:
     void updateGame();
+    void deleteEnemy(Enemy* enemy);
 };
 
 #endif // OPENGL_H

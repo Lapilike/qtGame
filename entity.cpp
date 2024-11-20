@@ -1,5 +1,8 @@
 #include "entity.h"
-#include "opengl.h"
+#include <algorithm>
+#include <cmath>
+
+using namespace std::chrono;
 
 Entity::Entity()
 {
@@ -8,22 +11,24 @@ Entity::Entity()
     Staggered = false;
 }
 
-bool Entity::checkCollision(std::vector<std::vector<Tile>> tiles)
+bool Entity::checkCollision(std::vector<std::vector<Tile>> &tiles)
 {
     std::vector<std::vector<int>> NextTiles;
 
     getTilesInFront(NextTiles);
 
-    if (!tiles[NextTiles[0][1]][NextTiles[0][0]].isBlocked()
-        && tiles[NextTiles[0][1]][NextTiles[0][0]].Interation() == NOINTERACTION
-        && !tiles[NextTiles[1][1]][NextTiles[1][0]].isBlocked()
-        && tiles[NextTiles[1][1]][NextTiles[1][0]].Interation() == NOINTERACTION
-        && !tiles[NextTiles[2][1]][NextTiles[2][0]].isBlocked()
-        && tiles[NextTiles[2][1]][NextTiles[2][0]].Interation() == NOINTERACTION)
+    bool Check = true;
+
+    for(int i = 0; i < NextTiles.size(); i++) {
+        if(tiles[NextTiles[i][1]][NextTiles[i][0]].isBlocked()
+            || tiles[NextTiles[i][1]][NextTiles[i][0]].Interation() != NOINTERACTION) {
+            Check = false;
+            break;
+        }
+    }
+    if(Check)
         return false;
 
-    bool Check = false;
-  
     m_Pos[0] += m_Direct[0] * (float)m_Vel;
     m_Pos[1] += m_Direct[1] * (float)m_Vel;
 
@@ -31,7 +36,7 @@ bool Entity::checkCollision(std::vector<std::vector<Tile>> tiles)
         if(tiles[NextTiles[i][1]][NextTiles[i][0]].isBlocked()) {
             CollisionBox *Collision = getCollision();
             CollisionBox *Obstacle = tiles[NextTiles[i][1]][NextTiles[i][0]].getCollision();
-            Check= Collision->checkIntersect(*Obstacle);
+            Check = Collision->checkIntersect(*Obstacle);
 
             if(Check) {
                 m_Pos[0] -= m_Direct[0] * (float)m_Vel;
@@ -42,6 +47,9 @@ bool Entity::checkCollision(std::vector<std::vector<Tile>> tiles)
         if(!(tiles[NextTiles[i][1]][NextTiles[i][0]].Interation() == NOINTERACTION)) {
             CollisionBox *Collision = getCollision();
             Obj *Obstacle = (Obj*)tiles[NextTiles[i][1]][NextTiles[i][0]].getObject();
+            CollisionBox *ObstacleCollision = Obstacle->getCollision();
+            if(ObstacleCollision == Collision)
+                continue;
             Check = Collision->checkIntersect(*Obstacle->getCollision());
             if(Check) {
                 m_Pos[0] -= m_Direct[0] * (float)m_Vel;
@@ -58,25 +66,22 @@ bool Entity::checkCollision(std::vector<std::vector<Tile>> tiles)
 //1
 void Entity::getTilesInFront(std::vector<std::vector<int>> &NextTiles)
 {
-    int TilePosX = m_Pos[0] / TILE_SIZE;
-    int TilePosY = m_Pos[1] / TILE_SIZE;
+    CollisionBox* collision = getCollision();
+    std::vector<float> size = collision->returnSize();
+    int xMin = std::min(m_Pos[0], m_Pos[0] + static_cast<int>(m_Direct[0] * m_Vel)) - size[0] / 2;
+    int xMax = std::max(m_Pos[0], m_Pos[0] + static_cast<int>(m_Direct[0] * m_Vel)) + size[0] / 2;
+    int yMin = std::min(m_Pos[1], m_Pos[1] + static_cast<int>(m_Direct[1] * m_Vel)) - size[1] / 2;
+    int yMax = std::max(m_Pos[1], m_Pos[1] + static_cast<int>(m_Direct[1] * m_Vel)) + size[1] / 2;
 
+    int cellXMin = xMin / TILE_SIZE;
+    int cellXMax = xMax / TILE_SIZE;
+    int cellYMin = yMin / TILE_SIZE;
+    int cellYMax = yMax / TILE_SIZE;
 
-    std::vector<float> Direct = {m_Direct[0], m_Direct[1]};
-    bool isDiagonal = static_cast<int>(Direct[0] + Direct[1]) % 2 == 0;
-    int offsetX, offsetY;
-    for(int i = 0; i < 3; i++) {
-        if(isDiagonal) {
-            offsetX = Direct[0] * ((i + 1) / 2);
-            offsetY = Direct[1] * ((i + 1) % 2);
+    for (int cellX = cellXMin; cellX <= cellXMax; ++cellX) {
+        for (int cellY = cellYMin; cellY <= cellYMax; ++cellY) {
+            NextTiles.push_back({cellX, cellY});
         }
-        else {
-            int directionModifier = (i % 2 == 0) ? 1 : -1;
-            offsetX = Direct[0] + Direct[1] * directionModifier;
-            offsetY = Direct[1] + Direct[0] * directionModifier;
-        }
-
-        NextTiles.push_back({TilePosX + offsetX, TilePosY + offsetY});
     }
 }
 
@@ -135,11 +140,20 @@ bool Entity::isStaggered()
     return Staggered;
 }
 
-void Entity::move(std::vector<std::vector<Tile>> tiles)
+void Entity::move(std::vector<std::vector<Tile>> &tiles)
 {
     if (!(checkCollision(tiles)) && !Staggered) {
-        m_Pos[0] += m_Direct[0] * (float) m_Vel;
-        m_Pos[1] += m_Direct[1] * (float) m_Vel;
+        int StartX = m_Pos[0] / TILE_SIZE;
+        int StartY = m_Pos[1] / TILE_SIZE;
+        m_Pos[0] += m_Direct[0] * m_Vel;
+        m_Pos[1] += m_Direct[1] * m_Vel;
+        if (StartX != m_Pos[0] / TILE_SIZE || StartY != m_Pos[1] / TILE_SIZE) {
+            InteractionType Interaction = tiles[StartY][StartX].Interation();
+            tiles[StartY][StartX].setObject(nullptr, NOINTERACTION);
+            tiles[m_Pos[1] / TILE_SIZE][m_Pos[0] / TILE_SIZE].setObject(this, Interaction);
+        }
     }
     m_Vel = 0;
+
+
 }

@@ -17,6 +17,7 @@ SOURCES += \
     chest.cpp \
     collisionbox.cpp \
     enemy.cpp \
+    enemymanager.cpp \
     entity.cpp \
     inventory.cpp \
     item.cpp \
@@ -36,8 +37,10 @@ HEADERS += \
     chest.h \
     collisionbox.h \
     enemy.h \
+    enemymanager.h \
     entity.h \
     gamewindow.h \
+    ui_gamewindow.h \
     inventory.h \
     item.h \
     map.h \

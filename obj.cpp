@@ -4,7 +4,7 @@
 Obj::Obj()
 {
     texture = new QOpenGLTexture(QImage(TEST_TEX));
-    Collision = nullptr;
+    m_Collision = nullptr;
     m_Pos = {200, 200};
     m_Size = {1, 1};
     m_Direct = {1, 0};
@@ -84,19 +84,19 @@ void Obj::addAnimation(QImage SpriteSheet, int State, int FrameCount, float Anim
 
 void Obj::setNewCollision(float width, float height)
 {
-    Collision = new CollisionBox(&m_Pos);
-    Collision->setSize(width, height);
+    m_Collision = new CollisionBox(&m_Pos);
+    m_Collision->setSize(width, height);
 }
 
 void Obj::setCollision(float width, float height)
 {
-    Collision->setPositionVector(&m_Pos);
-    Collision->setSize(width, height);
+    m_Collision->setPositionVector(&m_Pos);
+    m_Collision->setSize(width, height);
 }
 
 CollisionBox *Obj::getCollision()
 {
-    return Collision;
+    return m_Collision;
 }
 
 void Obj::draw(SpriteRenderer &renderer)
@@ -129,4 +129,10 @@ float Obj::y()
     return Y;
 }
 
-Obj::~Obj() {}
+Obj::~Obj() {
+    delete m_Collision;
+    delete texture;
+    for (const auto &[State, Anim] : anim)
+        delete Anim;
+    anim.clear();
+}

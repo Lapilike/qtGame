@@ -7,12 +7,12 @@
 #include "spriterenderer.h"
 #define TILE_SIZE 60
 
-enum InteractionType { NOINTERACTION, CHEST, NPC, DIALOG, SHOP, ENEMY };
+enum InteractionType { NOINTERACTION, CHEST, NPC, DIALOG, SHOP, ENEMY, PLAYER};
 
 class Obj
 {
 private:
-    CollisionBox *Collision;
+    CollisionBox *m_Collision;
 
 public:
     std::vector<int> m_Pos;
@@ -39,7 +39,7 @@ public:
     CollisionBox *getCollision();
     float x();
     float y();
-    ~Obj();
+    virtual ~Obj();
 };
 
 #endif // OBJ_H

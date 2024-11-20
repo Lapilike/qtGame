@@ -20,17 +20,20 @@ void OpenGL::initializeGL()
     m_Renderer = new SpriteRenderer(loadShader());
     initMap();
     loadTextures();
+    m_player->anim = anim;
+    m_level->tiles[m_player->m_Pos[1] / TILE_SIZE][m_player->m_Pos[0] / TILE_SIZE].setObject(m_player, PLAYER);
 
-    m_player->anim = m_Animations["player"];
+    m_Manager = new EnemyManager(m_Renderer);
+    m_Manager->spawnEnemies(m_level->tiles, m_player);
 
-    Bleb* bleb = new Bleb(&m_level->tiles, 10, 10, &m_player->m_Pos);
-    Enemies.push_back(bleb);
+    connect(m_player, &Player::EnemyDied, m_Manager, &EnemyManager::enemyDeath);
+    connect(m_Manager, &EnemyManager::enemyDied, this, &OpenGL::deleteEnemy);
 
     timer = new QTimer(this);
     connect(timer, &QTimer::timeout, [=](){
         static bool isRunning = false;
 
-        if (isRunning) return; // Пропуск, если функция ещё выполняется
+        if (isRunning) return;
         isRunning = true;
 
         QElapsedTimer elapsedTimer;
@@ -38,7 +41,7 @@ void OpenGL::initializeGL()
         updateGame();
         int elapsed = elapsedTimer.elapsed();
         int nextInterval = fmax(0, static_cast<int>(1000/FPS) - static_cast<int>(elapsed));
-        timer->setInterval(nextInterval); // Учитываем задержку
+        timer->setInterval(nextInterval);
         isRunning = false;
     });
     timer->start(1000/FPS);
@@ -51,15 +54,8 @@ void OpenGL::resizeGL(int w, int h)
 
 
 void OpenGL::paintGL() {
-    if(!m_player->isStaggered()) {
-        checkMoveKeys();
-        checkInteractKeys();
-    }
-    checkDeadEnemies();
-
     drawMap();
-    for(int i = 0; i < Enemies.size(); i++)
-        Enemies[i]->renderAnim(*m_Renderer);
+    m_Manager->drawEnemies();
     drawPlayer();
 }
 
@@ -85,7 +81,23 @@ void OpenGL::initMap()
 
 
 void OpenGL::updateGame() {
+    if(!m_player->isStaggered()) {
+        checkMoveKeys();
+        checkInteractKeys();
+    }
+    if(m_Manager->isAllDead()) {
+        QTimer::singleShot(5000, [=]() { m_Manager->spawnEnemies(m_level->tiles, m_player); });
+        emit startCountDown();
+    }
     update();
+}
+
+void OpenGL::deleteEnemy(Enemy *enemy)
+{
+    int TilePosX = enemy->m_Pos[0] / TILE_SIZE;
+    int TilePosY = enemy->m_Pos[1] / TILE_SIZE;
+    m_level->tiles[TilePosY][TilePosX].setObject(nullptr, NOINTERACTION);
+    delete enemy;
 }
 
 void OpenGL::loadTextures()
@@ -102,14 +114,15 @@ void OpenGL::loadTextures()
         m_textures[i]->setWrapMode(QOpenGLTexture::Repeat);
     }
 
-    m_Animations["player"][IDLE] = new Animation;
-    m_Animations["player"][IDLE]->addAnimation(QImage(":/Animations/Player/Player_Idle"), 6, 8);
-    m_Animations["player"][IDLEUP] = new Animation;
-    m_Animations["player"][IDLEUP]->addAnimation(QImage(":/Animations/Player/Player_Idle_Up"), 6, 8);
-    m_Animations["player"][RUN] = new Animation;
-    m_Animations["player"][RUN]->addAnimation(QImage(":/Animations/Player/Player_Run"), 4, 3);
-    m_Animations["player"][ATTACK] = new Animation;
-    m_Animations["player"][ATTACK]->addAnimation(QImage(":/Animations/Player/Player_Attack"), 8, 2);
+
+    anim[IDLE] = new Animation;
+    anim[IDLE]->addAnimation(":/Animations/Player/Player_Idle", 6, 8);
+    anim[IDLEUP] = new Animation;
+    anim[IDLEUP]->addAnimation(QImage(":/Animations/Player/Player_Idle_Up"), 6, 8);
+    anim[RUN] = new Animation;
+    anim[RUN]->addAnimation(QImage(":/Animations/Player/Player_Run"), 4, 3);
+    anim[ATTACK] = new Animation;
+    anim[ATTACK]->addAnimation(QImage(":/Animations/Player/Player_Attack"), 8, 2);
 }
 
 void OpenGL::drawMap()
@@ -139,18 +152,6 @@ void OpenGL::keyReleaseEvent(QKeyEvent *event)
 {
     if (!event->isAutoRepeat()) { // Игнорируем повторные события при удержании клавиши
         m_PressedKeys.remove(event->nativeScanCode()); // Добавляем клавишу в набор нажатых клавиш
-    }
-}
-
-void OpenGL::checkDeadEnemies()
-{
-    for (int i = 0; i < Enemies.size(); i++) {
-        if (Enemies[i]->isDead()) {
-            m_level->tiles[Enemies[i]->m_Pos[1] / TILE_SIZE][Enemies[i]->m_Pos[0] / TILE_SIZE]
-                .setObject(nullptr, NOINTERACTION);
-            delete Enemies[i];
-            Enemies.erase(Enemies.cbegin() + i);
-        }
     }
 }
 

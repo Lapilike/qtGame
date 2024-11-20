@@ -61,6 +61,11 @@ void Item::setStat(std::stringstream &LineStream)
     }
 }
 
+void Item::setAmnt(int Amount)
+{
+    m_ItemCount = Amount;
+}
+
 void Item::equip()
 {
     m_Equiped = true;
@@ -84,6 +89,11 @@ short *Item::amountOfItems()
 int Item::getID()
 {
     return m_ID;
+}
+
+std::map<StatType, short> Item::getStats()
+{
+    return m_Stats.getStatsMap();
 }
 
 std::string Item::getName()

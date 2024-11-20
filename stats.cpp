@@ -16,3 +16,8 @@ int Stats::getStat(int Type)
 {
     return m_Stats[(StatType) Type];
 }
+
+std::map<StatType, short> Stats::getStatsMap()
+{
+    return m_Stats;
+}

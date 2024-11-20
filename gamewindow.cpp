@@ -1,9 +1,9 @@
+#include "ui_gamewindow.h"
 #include "gamewindow.h"
 #include <QDebug>
 #include <QImage>
 #include <QLabel>
 #include <QTimer>
-#include "ui_gamewindow.h"
 #include <iostream>
 
 GameWindow::GameWindow(QWidget *parent)
@@ -15,6 +15,7 @@ GameWindow::GameWindow(QWidget *parent)
     move(0, 0);
     ui->frame->setVisible(false);
     connect(ui->openGLWidget, &OpenGL::openChest, this, &GameWindow::openInventory);
+    connect(ui->openGLWidget, &OpenGL::startCountDown, this, &GameWindow::showCountDown);
     ui->openGLWidget->resize(width() / 1.25f, height() / 1.25f);
     std::cout << width() << " " << height() << " " << std::endl;
     ui->openGLWidget->move(0, 0);
@@ -50,3 +51,18 @@ void GameWindow::on_pushButton_2_clicked()
 }
 
 void GameWindow::on_listWidget_2_itemDoubleClicked(QListWidgetItem *item) {}
+
+void GameWindow::showCountDown()
+{
+    //ui->label_2->setVisible(true);
+    int i = 4;
+    QTimer* timer = new QTimer;
+    GameWindow::connect(timer, &QTimer::timeout, [=, &i]() {
+        std::string text = "New Wave in";
+        ui->label->setText(text.data());
+        i--;
+        if(i == 0) timer->stop();
+    });
+    timer->start(1000);
+}
+

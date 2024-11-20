@@ -1,16 +1,7 @@
 #include "enemy.h"
+#include "player.h"
 #include <fstream>
 #include <sstream>
-
-Enemy::Enemy() {}
-
-Enemy::~Enemy()
-{
-    delete getCollision();
-    delete texture;
-    for (const auto &[State, Anim] : anim)
-        delete Anim;
-}
 
 void Enemy::Spawn(std::vector<std::vector<Tile>> &Tiles, int EnemyID, int TilePosX, int TilePosY)
 {
@@ -25,6 +16,7 @@ void Enemy::Spawn(std::vector<std::vector<Tile>> &Tiles, int EnemyID, int TilePo
     m_Pos[1] = TILE_SIZE * TilePosY + TILE_SIZE / 2;
 
     loadFromFile(EnemyID);
+    m_Stats.setStat(MAXHP,  m_Stats.getStat(HP));
 }
 
 void Enemy::loadFromFile(int EnemyID)
@@ -53,17 +45,16 @@ void Enemy::loadFromFile(int EnemyID)
     IDFile.close();
 }
 
-void Enemy::getDamaged(int Damage)
+bool Enemy::getDamaged(int Damage)
 {
     int hp = m_Stats.getStat(HP);
     m_Stats.setStat(HP, hp - Damage);
+    return isDead();
 }
 
 bool Enemy::isDead()
 {
     bool Dead = m_Stats.getStat(HP) <= 0;
-    qDebug() << Dead;
-    qDebug() << m_Stats.getStat(HP);
     return Dead;
 }
 
@@ -105,5 +96,32 @@ void Enemy::setStats(std::ifstream &IDFile)
         lineStream >> StatVector[0];
         lineStream >> StatVector[1];
         m_Stats.setStat(StatVector);
+
     }
+}
+
+
+int Enemy::CalcDamage(Stats* AttackerStats)
+{
+    float HP = static_cast<float>(AttackerStats->getStat(MAXHP));
+    float Mdef = static_cast<float>(AttackerStats->getStat(MDEF));
+    float Pdef = static_cast<float>(AttackerStats->getStat(PDEF));
+    float MDMGReduction = (-HP * (HP / (2 * Mdef + HP) - 1)) / 100.0;
+    float PDMGReduction = (-HP * (HP / (2 * Pdef + HP) - 1)) / 100.0;
+    int Damage = (m_Stats.getStat(PDMG) - (int)(PDMGReduction * m_Stats.getStat(PDMG))) + (m_Stats.getStat(MDMG) - (int)(MDMGReduction * m_Stats.getStat(MDMG)));
+    return Damage;
+}
+
+void Enemy::setUID(uintptr_t UID)
+{
+    m_UID = UID;
+}
+
+uintptr_t Enemy::getUID()
+{
+    return m_UID;
+}
+
+void enemyDead(Enemy* enemy, std::vector<std::vector<Tile>> &Tiles) {
+
 }

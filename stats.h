@@ -15,6 +15,7 @@ enum StatType {
     MDEF,
     CRITRATE,
     CRITDMG,
+    MAXHP,
 };
 
 class Stats
@@ -28,6 +29,7 @@ public:
     void setStat(int StatType, int StatValue);
 
     int getStat(int StatType);
+    std::map<StatType, short> getStatsMap();
 };
 
 #endif // STATS_H
